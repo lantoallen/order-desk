@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Desk</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="page-header">
+        <p class="eyebrow">Coffee Roaster</p>
+        <h1>Order Desk</h1>
+        <p class="subtitle">Products and incoming orders, all in one place.</p>
+      </header>
+
+      <p id="message" class="message" role="status" aria-live="polite"></p>
+
+      <section aria-labelledby="products-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Inventory</p>
+            <h2 id="products-heading">Products</h2>
+          </div>
+          <button id="add-product-button" type="button">Add product</button>
+        </div>
+        <div id="products-list" class="product-grid" aria-live="polite"></div>
+      </section>
+
+      <section class="orders-section" aria-labelledby="orders-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Fulfillment</p>
+            <h2 id="orders-heading">Orders</h2>
+          </div>
+        </div>
+
+        <form id="order-form" class="order-form">
+          <label>
+            Customer name
+            <input id="customer-name" name="customer_name" type="text" required />
+          </label>
+          <label>
+            Product
+            <select id="product-id" name="product_id" required>
+              <option value="">Select a product</option>
+            </select>
+          </label>
+          <label>
+            Quantity
+            <input id="quantity" name="quantity" type="number" min="1" step="1" value="1" required />
+          </label>
+          <button type="submit">Create order</button>
+        </form>
+
+        <div class="order-filters" aria-label="Filter orders">
+          <label>
+            Search orders
+            <input id="order-search" type="search" placeholder="Customer or product" />
+          </label>
+          <label>
+            Status
+            <select id="order-status-filter">
+              <option value="">All statuses</option>
+              <option value="pending">Pending</option>
+              <option value="preparing">Preparing</option>
+              <option value="ready">Ready</option>
+              <option value="picked_up">Picked up</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="orders-list"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="product-dialog">
+      <form id="product-form" class="dialog-form">
+        <div class="dialog-heading">
+          <h2 id="product-dialog-title">Add product</h2>
+          <button id="close-product-dialog" class="icon-button" type="button" aria-label="Close">×</button>
+        </div>
+        <input id="product-id" name="product_id" type="hidden" />
+        <label>
+          Product name
+          <input id="product-name" name="name" type="text" required />
+        </label>
+        <label>
+          Price
+          <input id="product-price" name="price" type="number" min="0" step="0.01" required />
+        </label>
+        <label>
+          Stock quantity
+          <input id="product-stock" name="stock_quantity" type="number" min="0" step="1" required />
+        </label>
+        <label>
+          Product image <span class="optional">(optional)</span>
+          <input id="product-image" name="image" type="file" accept="image/*" />
+        </label>
+        <p id="product-form-error" class="form-error" role="alert"></p>
+        <button id="product-submit-button" type="submit">Add product</button>
+      </form>
+    </dialog>
+
+    <dialog id="stock-dialog">
+      <form id="stock-form" class="dialog-form">
+        <div class="dialog-heading">
+          <h2>Replenish stock</h2>
+          <button id="close-stock-dialog" class="icon-button" type="button" aria-label="Close">×</button>
+        </div>
+        <input id="stock-product-id" type="hidden" />
+        <p id="stock-product-name" class="dialog-description"></p>
+        <label>
+          Quantity to add
+          <input id="replenish-quantity" name="quantity" type="number" min="1" step="1" value="1" required />
+        </label>
+        <p id="stock-form-error" class="form-error" role="alert"></p>
+        <button id="stock-submit-button" type="submit">Add stock</button>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>

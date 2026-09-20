@@ -1,0 +1,386 @@
+:root {
+  color: #2d241f;
+  background: #f7f3ed;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.container {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 3.5rem 0 5rem;
+}
+
+.page-header {
+  margin-bottom: 2.5rem;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0.35rem;
+  font-family: Georgia, serif;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1;
+}
+
+h2 {
+  margin-bottom: 0;
+  font-size: 1.5rem;
+}
+
+.eyebrow {
+  margin-bottom: 0.5rem;
+  color: #94704a;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  color: #6b5b50;
+}
+
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.section-heading > button {
+  padding: 0.65rem 0.9rem;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1rem;
+}
+
+.product-card,
+.order-form,
+.table-wrapper {
+  border: 1px solid #e5dcd2;
+  border-radius: 12px;
+  background: #fffdfa;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+}
+
+.product-image,
+.product-image-placeholder {
+  width: 100%;
+  height: 130px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  object-fit: cover;
+}
+
+.product-image-placeholder {
+  display: grid;
+  place-items: center;
+  background: #efe5d8;
+  color: #94704a;
+  font-size: 0.85rem;
+}
+
+.product-card h3 {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+}
+
+.product-price {
+  margin: 0 0 0.25rem;
+  color: #553d28;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.product-stock {
+  margin-bottom: 1rem;
+  color: #75665a;
+  font-size: 0.9rem;
+}
+
+.product-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.product-actions button {
+  padding: 0.5rem 0.65rem;
+  font-size: 0.8rem;
+}
+
+.orders-section {
+  margin-top: 3.5rem;
+}
+
+.order-form {
+  display: grid;
+  grid-template-columns: 1.4fr 1.4fr 0.6fr auto;
+  gap: 1rem;
+  align-items: end;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.order-filters {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin: 0 0 1.25rem;
+}
+
+.order-filters label:first-child {
+  width: min(100%, 280px);
+}
+
+label {
+  display: grid;
+  gap: 0.4rem;
+  color: #5e5046;
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+input,
+select {
+  min-width: 0;
+  border: 1px solid #cfc2b6;
+  border-radius: 7px;
+  background: #fff;
+  padding: 0.65rem 0.7rem;
+  color: #2d241f;
+}
+
+input:focus,
+select:focus {
+  outline: 3px solid #ead6bd;
+  border-color: #8d623a;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  border-radius: 7px;
+  background: #6f4526;
+  padding: 0.7rem 1rem;
+  color: white;
+  font-weight: 700;
+}
+
+button:hover {
+  background: #51301a;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  background: #c9c1ba;
+  color: #726961;
+}
+
+button:disabled:hover {
+  background: #c9c1ba;
+}
+
+.delete-button {
+  background: transparent;
+  border: 1px solid #d2bcb5;
+  color: #9d3d2d;
+}
+
+.delete-button:hover {
+  background: #fff0ed;
+}
+
+.secondary-button {
+  border: 1px solid #d2bcb5;
+  background: transparent;
+  color: #63472e;
+}
+
+.secondary-button:hover {
+  background: #f7eee5;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th,
+td {
+  border-bottom: 1px solid #eee7df;
+  padding: 1rem;
+  white-space: nowrap;
+}
+
+th {
+  color: #76665a;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+td select {
+  min-width: 120px;
+  padding: 0.45rem;
+}
+
+.status-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-controls button {
+  padding: 0.48rem 0.75rem;
+}
+
+.inline-error {
+  display: block;
+  margin-top: 0.4rem;
+  color: #9d3d2d;
+  font-size: 0.8rem;
+  white-space: normal;
+}
+
+dialog {
+  width: min(460px, calc(100% - 2rem));
+  border: 1px solid #e5dcd2;
+  border-radius: 12px;
+  box-shadow: 0 1rem 3rem rgb(54 37 24 / 25%);
+  padding: 0;
+}
+
+dialog::backdrop {
+  background: rgb(45 36 31 / 45%);
+}
+
+.dialog-form {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.dialog-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dialog-heading h2 {
+  font-size: 1.35rem;
+}
+
+.icon-button {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #6b5b50;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.icon-button:hover {
+  background: #f1e9e1;
+}
+
+.optional,
+.dialog-description {
+  color: #75665a;
+  font-weight: 400;
+}
+
+.dialog-description {
+  margin: -0.5rem 0 0;
+}
+
+.form-error {
+  min-height: 1.1rem;
+  margin: 0;
+  color: #9d3d2d;
+  font-size: 0.85rem;
+}
+
+.message {
+  min-height: 1.25rem;
+  margin-bottom: 1rem;
+  color: #9d3d2d;
+  font-weight: 600;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #75665a;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 720px) {
+  .container {
+    padding-top: 2.5rem;
+  }
+
+  .order-form {
+    grid-template-columns: 1fr;
+  }
+
+  .order-filters {
+    display: grid;
+    justify-content: stretch;
+  }
+
+  .order-filters label:first-child {
+    width: auto;
+  }
+}
