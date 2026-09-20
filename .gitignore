@@ -1,0 +1,12 @@
+# Dependencies
+node_modules/
+
+# Environment and sensitive keys
+.env
+.env.local
+*.env
+
+# OS junk files
+.DS_Store
+Thumbs.db
+__MACOSX/
