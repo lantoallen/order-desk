@@ -384,3 +384,16 @@ dialog::backdrop {
     width: auto;
   }
 }
+
+/* ---- Footer ---- */
+.site-footer {
+    margin-top: 80px;
+    padding: 32px 20px 40px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #7a6a58;
+    border-top: 1px solid;
+    border-image: linear-gradient(90deg, transparent, #b08d57, transparent) 1;
+}
+.site-footer p { margin: 0; }
+.site-footer .footer-note { margin-top: 6px; font-size: 0.78rem; }

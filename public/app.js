@@ -11,7 +11,7 @@ const stockDialog = document.querySelector("#stock-dialog");
 const stockForm = document.querySelector("#stock-form");
 
 const statuses = ["pending", "preparing", "ready", "picked_up"];
-const currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+const currency = new Intl.NumberFormat("en-PH", { style: "currency", currency: "PHP" });
 const state = { products: [], orders: [] };
 
 function showMessage(text = "") { message.textContent = text; }
