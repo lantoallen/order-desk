@@ -29,11 +29,11 @@ function statusLabel(status) { return statusLabels[status] || status; }
 // Greeting by time of day, the way Batangueños say it
 function greeting(date = new Date()) {
   const hour = date.getHours();
-  if (hour < 5) return "Magandang gabi po.";
-  if (hour < 11) return "Magandang umaga po.";
-  if (hour < 14) return "Magandang tanghali po.";
-  if (hour < 18) return "Magandang hapon po.";
-  return "Magandang gabi po.";
+  if (hour < 5) return "Magandang gabi.";
+  if (hour < 11) return "Magandang umaga.";
+  if (hour < 14) return "Magandang tanghali.";
+  if (hour < 18) return "Magandang hapon.";
+  return "Magandang gabi.";
 }
 
 function formatToday(date = new Date()) {
@@ -89,7 +89,7 @@ function stockText(product) {
   if (quantity === 0 || quantity <= lowStockLevel) {
     const flag = document.createElement("span");
     flag.className = quantity === 0 ? "stock-flag is-out" : "stock-flag";
-    flag.textContent = quantity === 0 ? "Ubos na" : "Paubos na";
+    flag.textContent = quantity === 0 ? "Ubos na" : "Kaunti na lang";
     text.append(flag);
   }
   return text;
