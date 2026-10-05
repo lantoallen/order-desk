@@ -47,20 +47,16 @@ function formatToday(date = new Date()) {
 function renderHeader() {
   document.querySelector("#greeting").textContent = greeting();
   document.querySelector("#today").textContent = formatToday();
-  const summary = document.querySelector("#summary");
-  if (state.orders.length === 0) {
-    summary.textContent = "Wala pang order. Gumawa ng una sa ibaba.";
-    return;
-  }
-  const count = (status) => state.orders.filter((order) => order.status === status).length;
-  const pending = count("pending");
-  const preparing = count("preparing");
-  const ready = count("ready");
-  if (pending + preparing + ready === 0) {
-    summary.textContent = "Naibigay na ang lahat ng order.";
-    return;
-  }
-  summary.textContent = `${pending} ang naghihintay, ${preparing} ang inihahanda, ${ready} ang handa na.`;
+  const waiting = state.orders.filter((order) => order.status === "pending").length;
+  const low = state.products.filter((product) => Number(product.stock_quantity) <= lowStockLevel).length;
+  const sales = state.orders
+    .filter((order) => order.status === "picked_up")
+    .reduce((sum, order) => sum + (Number(order.total_price) || 0), 0);
+  document.querySelector("#stat-waiting").textContent = waiting;
+  const lowStat = document.querySelector("#stat-low");
+  lowStat.textContent = low;
+  lowStat.classList.toggle("is-alert", low > 0);
+  document.querySelector("#stat-sales").textContent = new Intl.NumberFormat("en-PH", { style: "currency", currency: "PHP", maximumFractionDigits: 0 }).format(sales);
 }
 
 async function request(url, options) {
@@ -96,6 +92,7 @@ function stockText(product) {
 }
 
 function renderProducts() {
+  renderHeader();
   productsList.replaceChildren();
   productSelect.replaceChildren(new Option("Pumili ng produkto", ""));
   document.querySelector("#products-count").textContent = state.products.length ? `${state.products.length} item` : "";

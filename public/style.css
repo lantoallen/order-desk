@@ -764,3 +764,55 @@ dialog {
   background: var(--seresa);
   color: #fff;
 }
+
+
+/* ---- Hero description ---- */
+.hero-note {
+  max-width: 42ch;
+  margin: 1.5rem 0 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--pawid);
+  color: var(--uling-soft);
+  font-size: 1.02rem;
+  line-height: 1.55;
+}
+
+
+/* ---- Hero tallies ---- */
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 0;
+  margin-top: 1.75rem;
+}
+
+.stat {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.1rem 1.5rem;
+  border-left: 3px solid var(--kawayan);
+}
+
+.stat:first-child {
+  padding-left: 1rem;
+  border-left-color: var(--pawid);
+}
+
+.stat-number {
+  font-size: 2.6rem;
+  font-stretch: 68%;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-number.is-alert {
+  color: var(--seresa);
+}
+
+.stat-label {
+  max-width: 14ch;
+  color: var(--uling-soft);
+  font-size: 0.88rem;
+  line-height: 1.3;
+}
