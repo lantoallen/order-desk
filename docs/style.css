@@ -1,7 +1,26 @@
+/* Order Desk for Kapehan
+   Palette is named after things from Batangas:
+   abaca (paper), uling (charcoal ink), lawa (Taal lake teal),
+   dayap (kalamansi gold), palay (rice-field green), kalawang (rust red). */
+
 :root {
-  color: #2d241f;
-  background: #f7f3ed;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --abaca: #eff1ea;
+  --sampaguita: #fbfbf7;
+  --uling: #211d1a;
+  --uling-soft: #54504a;
+  --abo: #7d7f76;
+  --guhit: #cfd2c6;
+  --lawa: #1d5a66;
+  --lawa-dark: #12414b;
+  --dayap: #e3b23c;
+  --palay: #3f7d4e;
+  --kalawang: #b0372a;
+
+  color: var(--uling);
+  background: var(--abaca);
+  font-family: "Archivo", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
 }
 
 * {
@@ -18,143 +37,234 @@ select {
   font: inherit;
 }
 
-.container {
-  width: min(1120px, calc(100% - 2rem));
-  margin: 0 auto;
-  padding: 3.5rem 0 5rem;
-}
-
-.page-header {
-  margin-bottom: 2.5rem;
-}
-
 h1,
 h2,
+h3,
 p {
   margin-top: 0;
 }
 
-h1 {
-  margin-bottom: 0.35rem;
-  font-family: Georgia, serif;
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
+/* Woven strip: a nod to banig mats, used only at the top and bottom of the page */
+.weave {
+  height: 10px;
+  background-color: var(--abaca);
+  background-image:
+    linear-gradient(135deg, var(--lawa) 25%, transparent 25%),
+    linear-gradient(225deg, var(--lawa) 25%, transparent 25%),
+    linear-gradient(315deg, var(--lawa) 25%, transparent 25%),
+    linear-gradient(45deg, var(--lawa) 25%, transparent 25%);
+  background-size: 20px 20px;
+  background-position: -10px 0, -10px 0, 0 0, 0 0;
+}
+
+.container {
+  width: min(1040px, calc(100% - 2.5rem));
+  margin: 0 auto;
+  padding: 0 0 4rem;
+}
+
+/* Masthead */
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding: 1.25rem 0;
+  border-bottom: 2px solid var(--uling);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.baybayin {
+  color: var(--lawa);
+  font-family: "Noto Sans Tagalog", "Archivo", sans-serif;
+  font-size: 2rem;
   line-height: 1;
 }
 
+.brand-name {
+  font-size: 1.05rem;
+  font-stretch: 80%;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.today {
+  margin: 0;
+  color: var(--uling-soft);
+  font-size: 0.95rem;
+}
+
+/* Hero: a greeting that also tells you what needs doing */
+.hero {
+  padding: 3.5rem 0 3rem;
+}
+
+h1 {
+  margin-bottom: 1.25rem;
+  max-width: 14ch;
+  font-size: clamp(3.4rem, 11vw, 7.5rem);
+  font-stretch: 68%;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 0.9;
+}
+
+.summary {
+  max-width: 36ch;
+  margin-bottom: 0;
+  color: var(--uling-soft);
+  font-size: 1.3rem;
+  line-height: 1.35;
+}
+
+/* Section headings */
 h2 {
   margin-bottom: 0;
-  font-size: 1.5rem;
+  font-size: 2.1rem;
+  font-stretch: 72%;
+  font-weight: 800;
+  line-height: 1.1;
 }
 
-.eyebrow {
-  margin-bottom: 0.5rem;
-  color: #94704a;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.subtitle {
-  color: #6b5b50;
+.count {
+  margin-left: 0.4rem;
+  color: var(--abo);
+  font-size: 1rem;
+  font-stretch: 100%;
+  font-weight: 500;
 }
 
 .section-heading {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--uling);
 }
 
-.section-heading > button {
-  padding: 0.65rem 0.9rem;
+.orders-section {
+  margin-top: 4.5rem;
 }
 
+/* Products: laid out like a menu board, name and price joined by a dotted line */
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr));
+  column-gap: 3rem;
 }
 
-.product-card,
-.order-form,
-.table-wrapper {
-  border: 1px solid #e5dcd2;
-  border-radius: 12px;
-  background: #fffdfa;
-}
-
-.product-card {
-  display: flex;
-  flex-direction: column;
-  padding: 1.25rem;
+.product {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  column-gap: 1rem;
+  align-items: start;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--guhit);
 }
 
 .product-image,
 .product-image-placeholder {
-  width: 100%;
-  height: 130px;
-  border-radius: 8px;
-  margin-bottom: 1rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 2px;
   object-fit: cover;
 }
 
 .product-image-placeholder {
   display: grid;
   place-items: center;
-  background: #efe5d8;
-  color: #94704a;
-  font-size: 0.85rem;
+  background: rgb(29 90 102 / 12%);
+  color: var(--lawa);
+  font-size: 1.6rem;
+  font-stretch: 70%;
+  font-weight: 800;
 }
 
-.product-card h3 {
-  margin: 0 0 1rem;
-  font-size: 1.05rem;
+.product-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.product h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.leader {
+  flex: 1;
+  min-width: 1rem;
+  border-bottom: 2px dotted var(--abo);
+  transform: translateY(-0.2em);
 }
 
 .product-price {
-  margin: 0 0 0.25rem;
-  color: #553d28;
-  font-size: 1.35rem;
+  margin: 0;
+  font-size: 1.15rem;
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .product-stock {
-  margin-bottom: 1rem;
-  color: #75665a;
+  margin: 0.15rem 0 0.5rem;
+  color: var(--uling-soft);
   font-size: 0.9rem;
+}
+
+.stock-flag {
+  margin-left: 0.4rem;
+  padding: 0.05rem 0.45rem;
+  background: var(--dayap);
+  color: var(--uling);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.stock-flag.is-out {
+  background: var(--kalawang);
+  color: #fff;
 }
 
 .product-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: auto;
+  gap: 0.25rem 1.1rem;
 }
 
-.product-actions button {
-  padding: 0.5rem 0.65rem;
-  font-size: 0.8rem;
+.empty-state {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 2rem 0;
+  color: var(--uling-soft);
 }
 
-.orders-section {
-  margin-top: 3.5rem;
-}
-
+/* Forms: filled in like a paper slip, with underlined fields */
 .order-form {
   display: grid;
   grid-template-columns: 1.4fr 1.4fr 0.6fr auto;
-  gap: 1rem;
+  gap: 1.25rem;
   align-items: end;
-  padding: 1.25rem;
-  margin-bottom: 1.25rem;
+  margin: 1.75rem 0;
+  padding: 1.5rem;
+  border: 1.5px dashed var(--abo);
+  background: var(--sampaguita);
 }
 
 .order-filters {
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
-  margin: 0 0 1.25rem;
+  gap: 1.5rem;
+  margin: 0 0 0.5rem;
 }
 
 .order-filters label:first-child {
@@ -163,72 +273,127 @@ h2 {
 
 label {
   display: grid;
-  gap: 0.4rem;
-  color: #5e5046;
-  font-size: 0.85rem;
-  font-weight: 650;
+  gap: 0.15rem;
+  color: var(--uling-soft);
+  font-size: 0.88rem;
+  font-weight: 600;
 }
 
 input,
 select {
   min-width: 0;
-  border: 1px solid #cfc2b6;
-  border-radius: 7px;
-  background: #fff;
-  padding: 0.65rem 0.7rem;
-  color: #2d241f;
+  border: 0;
+  border-bottom: 1.5px solid var(--uling);
+  border-radius: 0;
+  background: transparent;
+  padding: 0.5rem 0;
+  color: var(--uling);
+  font-size: 1rem;
+  font-weight: 500;
 }
 
-input:focus,
-select:focus {
-  outline: 3px solid #ead6bd;
-  border-color: #8d623a;
+input::placeholder {
+  color: var(--abo);
+  font-weight: 400;
 }
 
+input:focus-visible,
+select:focus-visible {
+  outline: none;
+  border-bottom-color: var(--lawa);
+  box-shadow: 0 1.5px 0 0 var(--lawa);
+}
+
+select {
+  appearance: none;
+  padding-right: 1.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23211d1a' stroke-width='1.6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.15rem center;
+  background-size: 0.75rem;
+}
+
+input[type="file"] {
+  padding: 0.4rem 0;
+  border-bottom-style: dashed;
+  font-size: 0.9rem;
+}
+
+input[type="file"]::file-selector-button {
+  margin-right: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  border: 1.5px solid var(--uling);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--uling);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Buttons: solid for the main action, plain text for everything else */
 button {
   cursor: pointer;
   border: 0;
-  border-radius: 7px;
-  background: #6f4526;
-  padding: 0.7rem 1rem;
-  color: white;
+  border-radius: 2px;
+  background: var(--lawa);
+  padding: 0.7rem 1.1rem;
+  color: #fff;
   font-weight: 700;
+  transition: background-color 120ms;
 }
 
 button:hover {
-  background: #51301a;
+  background: var(--lawa-dark);
 }
 
-button:disabled {
-  cursor: not-allowed;
-  background: #c9c1ba;
-  color: #726961;
+button:focus-visible {
+  outline: 3px solid var(--dayap);
+  outline-offset: 2px;
 }
 
+button:disabled,
 button:disabled:hover {
-  background: #c9c1ba;
+  cursor: not-allowed;
+  background: var(--guhit);
+  color: var(--abo);
 }
 
+.secondary-button,
 .delete-button {
+  padding: 0.2rem 0;
+  border-radius: 0;
   background: transparent;
-  border: 1px solid #d2bcb5;
-  color: #9d3d2d;
-}
-
-.delete-button:hover {
-  background: #fff0ed;
-}
-
-.secondary-button {
-  border: 1px solid #d2bcb5;
-  background: transparent;
-  color: #63472e;
+  color: var(--lawa);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
 }
 
 .secondary-button:hover {
-  background: #f7eee5;
+  background: transparent;
+  color: var(--lawa-dark);
+  text-decoration-thickness: 2px;
 }
 
+.delete-button,
+.delete-button:hover {
+  background: transparent;
+  color: var(--kalawang);
+}
+
+.delete-button:hover {
+  text-decoration-thickness: 2px;
+}
+
+.secondary-button:focus-visible,
+.delete-button:focus-visible {
+  outline-color: var(--lawa);
+}
+
+/* Orders: a ledger with ruled lines */
 .table-wrapper {
   overflow-x: auto;
 }
@@ -241,117 +406,171 @@ table {
 
 th,
 td {
-  border-bottom: 1px solid #eee7df;
-  padding: 1rem;
+  padding: 0.9rem 1rem 0.9rem 0;
+  border-bottom: 1px solid var(--guhit);
   white-space: nowrap;
 }
 
 th {
-  color: #76665a;
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  border-bottom: 2px solid var(--uling);
+  color: var(--uling-soft);
+  font-size: 0.85rem;
+  font-weight: 700;
 }
 
-tbody tr:last-child td {
-  border-bottom: 0;
+td:first-child {
+  font-weight: 650;
+}
+
+.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+th.num,
+td.num {
+  padding-right: 1.5rem;
 }
 
 td select {
-  min-width: 120px;
-  padding: 0.45rem;
+  min-width: 130px;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  font-size: 0.95rem;
 }
 
 .status-controls {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
 }
 
+.status-dot {
+  flex: none;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--abo);
+}
+
+.status-dot[data-status="pending"] { background: var(--dayap); }
+.status-dot[data-status="preparing"] { background: #4d8f9c; }
+.status-dot[data-status="ready"] { background: var(--palay); }
+.status-dot[data-status="picked_up"] { background: var(--abo); }
+
 .status-controls button {
-  padding: 0.48rem 0.75rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
 }
 
 .inline-error {
   display: block;
   margin-top: 0.4rem;
-  color: #9d3d2d;
+  color: var(--kalawang);
   font-size: 0.8rem;
   white-space: normal;
 }
 
+/* Dialogs */
 dialog {
   width: min(460px, calc(100% - 2rem));
-  border: 1px solid #e5dcd2;
-  border-radius: 12px;
-  box-shadow: 0 1rem 3rem rgb(54 37 24 / 25%);
+  border: 0;
+  border-top: 6px solid var(--lawa);
+  border-radius: 0;
+  background: var(--sampaguita);
+  box-shadow: 0 1.5rem 3rem rgb(33 29 26 / 30%);
   padding: 0;
+  color: var(--uling);
 }
 
 dialog::backdrop {
-  background: rgb(45 36 31 / 45%);
+  background: rgb(33 29 26 / 55%);
 }
 
 .dialog-form {
   display: grid;
-  gap: 1rem;
+  gap: 1.1rem;
   padding: 1.5rem;
 }
 
 .dialog-heading {
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
 }
 
 .dialog-heading h2 {
-  font-size: 1.35rem;
+  font-size: 1.7rem;
 }
 
 .icon-button {
-  width: 2rem;
-  height: 2rem;
+  width: 2.1rem;
+  height: 2.1rem;
   padding: 0;
   border-radius: 50%;
   background: transparent;
-  color: #6b5b50;
-  font-size: 1.5rem;
+  color: var(--uling);
+  font-size: 1.6rem;
   line-height: 1;
 }
 
 .icon-button:hover {
-  background: #f1e9e1;
+  background: var(--guhit);
 }
 
 .optional,
 .dialog-description {
-  color: #75665a;
+  color: var(--abo);
   font-weight: 400;
 }
 
 .dialog-description {
-  margin: -0.5rem 0 0;
+  margin: -0.4rem 0 0;
 }
 
 .form-error {
   min-height: 1.1rem;
   margin: 0;
-  color: #9d3d2d;
-  font-size: 0.85rem;
-}
-
-.message {
-  min-height: 1.25rem;
-  margin-bottom: 1rem;
-  color: #9d3d2d;
+  color: var(--kalawang);
+  font-size: 0.88rem;
   font-weight: 600;
 }
 
-.empty-state {
-  grid-column: 1 / -1;
-  margin: 0;
-  color: #75665a;
+/* Page-level error note */
+.message {
+  margin: 0 0 2rem;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid var(--kalawang);
+  background: rgb(176 55 42 / 8%);
+  color: var(--kalawang);
+  font-weight: 600;
+}
+
+.message:empty {
+  display: none;
+}
+
+/* Footer */
+.site-footer {
+  padding-bottom: 2.5rem;
+  text-align: center;
+  color: var(--uling-soft);
+  font-size: 0.9rem;
+}
+
+.site-footer .weave {
+  margin-bottom: 1.75rem;
+}
+
+.site-footer p {
+  margin: 0 1.25rem;
+}
+
+.footer-note {
+  margin-top: 0.25rem;
+  color: var(--abo);
+  font-size: 0.82rem;
 }
 
 .sr-only {
@@ -367,8 +586,17 @@ dialog::backdrop {
 }
 
 @media (max-width: 720px) {
-  .container {
-    padding-top: 2.5rem;
+  :root {
+    font-size: 16px;
+  }
+
+  .hero {
+    padding: 2.5rem 0 2.25rem;
+  }
+
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .order-form {
@@ -385,39 +613,181 @@ dialog::backdrop {
   }
 }
 
-/* ---- Footer ---- */
-.site-footer {
-    margin-top: 80px;
-    padding: 32px 20px 40px;
-    text-align: center;
-    font-size: 0.85rem;
-    color: #7a6a58;
-    border-top: 1px solid;
-    border-image: linear-gradient(90deg, transparent, #b08d57, transparent) 1;
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
 }
-.site-footer p { margin: 0; }
-.site-footer .footer-note { margin-top: 6px; font-size: 0.78rem; }
 
-/* ---- Demo banner ---- */
+/* Demo banner (GitHub Pages version only) */
 .demo-banner {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    padding: 10px 16px;
-    background: #3f2a1c;
-    color: #f7f1e8;
-    font-size: 0.85rem;
-    text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1rem;
+  padding: 0.6rem 1rem;
+  background: var(--uling);
+  color: var(--sampaguita);
+  font-size: 0.88rem;
+  text-align: center;
 }
+
 .demo-banner button {
-    background: transparent;
-    color: inherit;
-    border: 1px solid rgba(247, 241, 232, 0.5);
-    border-radius: 6px;
-    padding: 4px 10px;
-    font: inherit;
-    cursor: pointer;
+  padding: 0.25rem 0.7rem;
+  border: 1px solid rgb(251 251 247 / 55%);
+  background: transparent;
+  color: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
-.demo-banner button:hover { background: rgba(247, 241, 232, 0.15); }
+
+.demo-banner button:hover {
+  background: rgb(251 251 247 / 15%);
+}
+
+
+/* ---- Bahay kubo theme: nipa thatch, bamboo and rice-field greens ---- */
+:root {
+  --abaca: #f6eed8;
+  --sampaguita: #fffaf0;
+  --uling: #2b2114;
+  --uling-soft: #5b4d3a;
+  --abo: #8b7b62;
+  --guhit: #d8c9a6;
+  --lawa: #3f7a3a;
+  --lawa-dark: #2c5a29;
+  --palay: #3f7a3a;
+  --pawid: #c9983f;
+  --kawayan: #e0bf78;
+  --kahoy: #7a5632;
+}
+
+body {
+  background-image: repeating-linear-gradient(90deg, rgb(122 86 50 / 4%) 0 2px, transparent 2px 24px);
+}
+
+/* Thatch roof band with a bamboo rail underneath */
+.weave {
+  height: 26px;
+  background-color: transparent;
+  background-image:
+    repeating-linear-gradient(90deg, var(--kahoy) 0 2px, transparent 2px 7px),
+    linear-gradient(var(--pawid), var(--pawid)),
+    repeating-linear-gradient(90deg, var(--kawayan) 0 28px, #cda95e 28px 30px);
+  background-size: 100% 18px, 100% 18px, 100% 8px;
+  background-position: 0 0, 0 0, 0 18px;
+  background-repeat: no-repeat;
+}
+
+.site-footer .weave {
+  height: 16px;
+  background: radial-gradient(circle at 50% 100%, var(--palay) 55%, transparent 56%) 0 0 / 16px 16px repeat-x;
+}
+
+.masthead {
+  border-bottom: 3px solid var(--kahoy);
+}
+
+/* Hero: a bahay kubo standing in the rice field */
+.hero {
+  min-height: 330px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E %3Ccircle cx='338' cy='58' r='24' fill='%23f2c14e'/%3E %3Cpath d='M10 236 L112 148 L132 160 L150 146 L252 236Z' fill='%23cdd9b4'/%3E %3Cpath d='M230 236 L320 170 L400 236Z' fill='%23dde5c4'/%3E %3Crect y='236' width='400' height='64' fill='%238fb85a'/%3E %3Cg stroke='%236f9a42' stroke-width='2'%3E%3Cline x1='0' y1='252' x2='400' y2='252'/%3E%3Cline x1='0' y1='266' x2='400' y2='266'/%3E%3Cline x1='0' y1='280' x2='400' y2='280'/%3E%3Cline x1='0' y1='294' x2='400' y2='294'/%3E%3C/g%3E %3Cpath d='M70 244 Q84 180 66 118' stroke='%237a5632' stroke-width='7' fill='none'/%3E %3Cg stroke='%233f7a3a' stroke-width='5' fill='none' stroke-linecap='round'%3E%3Cpath d='M66 118 q-34 -12 -56 14'/%3E%3Cpath d='M66 118 q-22 -32 -52 -26'/%3E%3Cpath d='M66 118 q8 -36 40 -36'/%3E%3Cpath d='M66 118 q34 -16 62 4'/%3E%3Cpath d='M66 118 q26 10 46 36'/%3E%3C/g%3E %3Ccircle cx='62' cy='126' r='5' fill='%236b4a2e'/%3E%3Ccircle cx='73' cy='128' r='5' fill='%236b4a2e'/%3E %3Cg fill='%237a5632'%3E%3Crect x='196' y='200' width='7' height='42'/%3E%3Crect x='250' y='200' width='7' height='42'/%3E%3Crect x='306' y='200' width='7' height='42'/%3E%3Crect x='186' y='192' width='134' height='8'/%3E%3C/g%3E %3Crect x='200' y='150' width='112' height='42' fill='%23e0bf78'/%3E %3Cg stroke='%23b8903f' stroke-width='1.5'%3E%3Cline x1='208' y1='150' x2='208' y2='195'/%3E%3Cline x1='216' y1='150' x2='216' y2='195'/%3E%3Cline x1='224' y1='150' x2='224' y2='195'/%3E%3Cline x1='232' y1='150' x2='232' y2='195'/%3E%3Cline x1='240' y1='150' x2='240' y2='195'/%3E%3Cline x1='248' y1='150' x2='248' y2='195'/%3E%3Cline x1='256' y1='150' x2='256' y2='195'/%3E%3Cline x1='264' y1='150' x2='264' y2='195'/%3E%3Cline x1='272' y1='150' x2='272' y2='195'/%3E%3Cline x1='280' y1='150' x2='280' y2='195'/%3E%3Cline x1='288' y1='150' x2='288' y2='195'/%3E%3Cline x1='296' y1='150' x2='296' y2='195'/%3E%3Cline x1='304' y1='150' x2='304' y2='195'/%3E%3C/g%3E %3Crect x='262' y='160' width='28' height='22' fill='%233b2f20'/%3E%3Crect x='258' y='182' width='36' height='4' fill='%237a5632'/%3E %3Cg stroke='%237a5632' stroke-width='4'%3E%3Cline x1='182' y1='198' x2='168' y2='242'/%3E%3Cline x1='196' y1='198' x2='182' y2='242'/%3E%3C/g%3E %3Cg stroke='%237a5632' stroke-width='3'%3E%3Cline x1='180' y1='204' x2='194' y2='204'/%3E%3Cline x1='176' y1='213' x2='190' y2='213'/%3E%3Cline x1='172' y1='222' x2='186' y2='222'/%3E%3Cline x1='168' y1='231' x2='182' y2='231'/%3E%3C/g%3E %3Cpolygon points='176,154 256,68 336,154' fill='%23c9983f' stroke='%239a6f22' stroke-width='3' stroke-linejoin='round'/%3E %3Cg stroke='%23a97a26' stroke-width='1.5'%3E%3Cline x1='256' y1='70' x2='190' y2='152'/%3E%3Cline x1='256' y1='70' x2='202' y2='152'/%3E%3Cline x1='256' y1='70' x2='214' y2='152'/%3E%3Cline x1='256' y1='70' x2='226' y2='152'/%3E%3Cline x1='256' y1='70' x2='238' y2='152'/%3E%3Cline x1='256' y1='70' x2='250' y2='152'/%3E%3Cline x1='256' y1='70' x2='262' y2='152'/%3E%3Cline x1='256' y1='70' x2='274' y2='152'/%3E%3Cline x1='256' y1='70' x2='286' y2='152'/%3E%3Cline x1='256' y1='70' x2='298' y2='152'/%3E%3Cline x1='256' y1='70' x2='310' y2='152'/%3E%3Cline x1='256' y1='70' x2='322' y2='152'/%3E%3C/g%3E %3Cg stroke='%237a5632' stroke-width='3' stroke-linecap='round'%3E%3Cline x1='248' y1='60' x2='264' y2='76'/%3E%3Cline x1='264' y1='60' x2='248' y2='76'/%3E%3C/g%3E %3C/svg%3E") right bottom / min(420px, 46%) no-repeat;
+}
+
+.hero > * {
+  max-width: 56%;
+}
+
+h1 {
+  font-size: clamp(3rem, 8vw, 5.6rem);
+}
+
+h2::before {
+  content: "";
+  display: inline-block;
+  width: 1.7rem;
+  height: 1.2rem;
+  margin-right: 0.6rem;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 20'%3E%3Cpolygon points='14,1 27,14 1,14' fill='%23c9983f' stroke='%239a6f22' stroke-width='1.5' stroke-linejoin='round'/%3E%3Crect x='5' y='14' width='18' height='5' fill='%237a5632'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.section-heading {
+  border-bottom: 3px solid var(--kahoy);
+}
+
+th {
+  border-bottom: 3px solid var(--kahoy);
+}
+
+.product-image,
+.product-image-placeholder {
+  border: 2px solid var(--kawayan);
+  outline: 1px solid var(--kahoy);
+}
+
+.product-image-placeholder {
+  background: rgb(63 122 58 / 14%);
+}
+
+.order-form {
+  border: 2px dashed var(--kahoy);
+  background: var(--sampaguita);
+}
+
+.stock-flag {
+  background: var(--pawid);
+}
+
+dialog {
+  border-top: 8px solid var(--pawid);
+}
+
+@media (max-width: 720px) {
+  .hero {
+    min-height: 0;
+    background-size: min(260px, 70%);
+    padding-bottom: 12rem;
+  }
+
+  .hero > * {
+    max-width: 100%;
+  }
+}
+
+
+/* ---- Coffee pass: roasted browns, barako tree, beans ---- */
+:root {
+  --lawa: #6b3f22;
+  --lawa-dark: #45260f;
+  --palay: #3f7a3a;
+  --seresa: #b3261e;
+}
+
+.hero {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E %3Ccircle cx='338' cy='58' r='24' fill='%23f2c14e'/%3E %3Cpath d='M10 236 L112 148 L132 160 L150 146 L252 236Z' fill='%23cdd9b4'/%3E %3Cpath d='M230 236 L320 170 L400 236Z' fill='%23dde5c4'/%3E %3Crect y='236' width='400' height='64' fill='%238fb85a'/%3E %3Cg stroke='%236f9a42' stroke-width='2'%3E%3Cline x1='0' y1='252' x2='400' y2='252'/%3E%3Cline x1='0' y1='266' x2='400' y2='266'/%3E%3Cline x1='0' y1='280' x2='400' y2='280'/%3E%3Cline x1='0' y1='294' x2='400' y2='294'/%3E%3C/g%3E %3Cpath d='M70 244 Q84 180 66 118' stroke='%237a5632' stroke-width='7' fill='none'/%3E %3Cg stroke='%233f7a3a' stroke-width='5' fill='none' stroke-linecap='round'%3E%3Cpath d='M66 118 q-34 -12 -56 14'/%3E%3Cpath d='M66 118 q-22 -32 -52 -26'/%3E%3Cpath d='M66 118 q8 -36 40 -36'/%3E%3Cpath d='M66 118 q34 -16 62 4'/%3E%3Cpath d='M66 118 q26 10 46 36'/%3E%3C/g%3E %3Ccircle cx='62' cy='126' r='5' fill='%236b4a2e'/%3E%3Ccircle cx='73' cy='128' r='5' fill='%236b4a2e'/%3E %3Cg fill='%237a5632'%3E%3Crect x='196' y='200' width='7' height='42'/%3E%3Crect x='250' y='200' width='7' height='42'/%3E%3Crect x='306' y='200' width='7' height='42'/%3E%3Crect x='186' y='192' width='134' height='8'/%3E%3C/g%3E %3Crect x='200' y='150' width='112' height='42' fill='%23e0bf78'/%3E %3Cg stroke='%23b8903f' stroke-width='1.5'%3E%3Cline x1='208' y1='150' x2='208' y2='195'/%3E%3Cline x1='216' y1='150' x2='216' y2='195'/%3E%3Cline x1='224' y1='150' x2='224' y2='195'/%3E%3Cline x1='232' y1='150' x2='232' y2='195'/%3E%3Cline x1='240' y1='150' x2='240' y2='195'/%3E%3Cline x1='248' y1='150' x2='248' y2='195'/%3E%3Cline x1='256' y1='150' x2='256' y2='195'/%3E%3Cline x1='264' y1='150' x2='264' y2='195'/%3E%3Cline x1='272' y1='150' x2='272' y2='195'/%3E%3Cline x1='280' y1='150' x2='280' y2='195'/%3E%3Cline x1='288' y1='150' x2='288' y2='195'/%3E%3Cline x1='296' y1='150' x2='296' y2='195'/%3E%3Cline x1='304' y1='150' x2='304' y2='195'/%3E%3C/g%3E %3Crect x='262' y='160' width='28' height='22' fill='%233b2f20'/%3E%3Crect x='258' y='182' width='36' height='4' fill='%237a5632'/%3E %3Cg stroke='%237a5632' stroke-width='4'%3E%3Cline x1='182' y1='198' x2='168' y2='242'/%3E%3Cline x1='196' y1='198' x2='182' y2='242'/%3E%3C/g%3E %3Cg stroke='%237a5632' stroke-width='3'%3E%3Cline x1='180' y1='204' x2='194' y2='204'/%3E%3Cline x1='176' y1='213' x2='190' y2='213'/%3E%3Cline x1='172' y1='222' x2='186' y2='222'/%3E%3Cline x1='168' y1='231' x2='182' y2='231'/%3E%3C/g%3E %3Cpolygon points='176,154 256,68 336,154' fill='%23c9983f' stroke='%239a6f22' stroke-width='3' stroke-linejoin='round'/%3E %3Cg stroke='%23a97a26' stroke-width='1.5'%3E%3Cline x1='256' y1='70' x2='190' y2='152'/%3E%3Cline x1='256' y1='70' x2='202' y2='152'/%3E%3Cline x1='256' y1='70' x2='214' y2='152'/%3E%3Cline x1='256' y1='70' x2='226' y2='152'/%3E%3Cline x1='256' y1='70' x2='238' y2='152'/%3E%3Cline x1='256' y1='70' x2='250' y2='152'/%3E%3Cline x1='256' y1='70' x2='262' y2='152'/%3E%3Cline x1='256' y1='70' x2='274' y2='152'/%3E%3Cline x1='256' y1='70' x2='286' y2='152'/%3E%3Cline x1='256' y1='70' x2='298' y2='152'/%3E%3Cline x1='256' y1='70' x2='310' y2='152'/%3E%3Cline x1='256' y1='70' x2='322' y2='152'/%3E%3C/g%3E %3Cg stroke='%237a5632' stroke-width='3' stroke-linecap='round'%3E%3Cline x1='248' y1='60' x2='264' y2='76'/%3E%3Cline x1='264' y1='60' x2='248' y2='76'/%3E%3C/g%3E %3Crect x='367' y='190' width='6' height='48' fill='%236b4a2e'/%3E %3Cellipse cx='370' cy='176' rx='27' ry='35' fill='%232f6b32'/%3E %3Cellipse cx='364' cy='168' rx='12' ry='20' fill='%233f8a42'/%3E %3Cg fill='%23c0281e'%3E%3Ccircle cx='355' cy='172' r='3.6'/%3E%3Ccircle cx='383' cy='178' r='3.6'/%3E%3Ccircle cx='364' cy='192' r='3.6'/%3E%3Ccircle cx='377' cy='160' r='3.6'/%3E%3Ccircle cx='372' cy='186' r='3.6'/%3E%3Ccircle cx='360' cy='156' r='3.6'/%3E%3C/g%3E %3Crect x='106' y='226' width='44' height='5' fill='%237a5632'/%3E%3Crect x='111' y='231' width='5' height='11' fill='%237a5632'/%3E%3Crect x='140' y='231' width='5' height='11' fill='%237a5632'/%3E %3Cpath d='M120 211 h20 v8 q0 7 -10 7 q-10 0 -10 -7z' fill='%23fffaf0' stroke='%236b4a2e' stroke-width='1.5'/%3E %3Cellipse cx='130' cy='211' rx='10' ry='2.4' fill='%234a2c17'/%3E %3Cpath d='M140 214 q8 0 8 5 q0 4 -7 4' fill='none' stroke='%236b4a2e' stroke-width='1.5'/%3E %3Cg fill='none' stroke='%238b7b62' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M125 204 q-4 -6 0 -10 q4 -4 0 -9'/%3E%3Cpath d='M134 204 q-4 -6 0 -10 q4 -4 0 -9'/%3E%3C/g%3E %3C/svg%3E");
+}
+
+.site-footer .weave {
+  height: 20px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 20'%3E%3Cellipse cx='14' cy='10' rx='6' ry='8.5' transform='rotate(35 14 10)' fill='%235b3a21' fill-opacity='1'/%3E%3Cpath d='M9.5 16.5 Q15 10 18.5 3.5' fill='none' stroke='%23f6eed8' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") center / 28px 20px repeat-x;
+}
+
+.product-image-placeholder {
+  background: var(--sampaguita) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 20'%3E%3Cellipse cx='14' cy='10' rx='6' ry='8.5' transform='rotate(35 14 10)' fill='%235b3a21' fill-opacity='0.2'/%3E%3Cpath d='M9.5 16.5 Q15 10 18.5 3.5' fill='none' stroke='%23f6eed8' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") center / 22px 16px;
+  color: var(--lawa);
+}
+
+.stock-flag {
+  background: var(--seresa);
+  color: #fff;
+}
+
+.stock-flag.is-out {
+  background: var(--uling);
+}
+
+::selection {
+  background: var(--seresa);
+  color: #fff;
+}

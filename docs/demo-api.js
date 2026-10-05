@@ -178,10 +178,10 @@
     const banner = document.createElement("div");
     banner.className = "demo-banner";
     const text = document.createElement("span");
-    text.textContent = "Demo mode: sample data is saved in your browser only. Image uploads are turned off.";
+    text.textContent = "Demo ito: sa browser mo lang naka-save ang sample data. Hindi gumagana ang pag-upload ng larawan.";
     const reset = document.createElement("button");
     reset.type = "button";
-    reset.textContent = "Reset demo";
+    reset.textContent = "I-reset ang demo";
     reset.addEventListener("click", () => {
       try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
       location.reload();

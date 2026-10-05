@@ -1,71 +1,81 @@
 <!doctype html>
-<html lang="en">
+<html lang="fil">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Order Desk</title>
+    <meta name="theme-color" content="#1d5a66" />
+    <title>Order Desk | Kapehan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Noto+Sans+Tagalog&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div class="weave" aria-hidden="true"></div>
+
     <main class="container">
-      <header class="page-header">
-        <p class="eyebrow">KAPEHAN · BATANGAS COFFEE ROASTER</p>
-        <h1>Order Desk</h1>
-        <p class="subtitle">Products and incoming orders, all in one place.</p>
+      <header class="masthead">
+        <div class="brand">
+          <span class="baybayin" lang="tl-Tglg" aria-hidden="true">ᜃᜉᜒᜑᜈ᜔</span>
+          <span class="brand-name">Kapehan Order Desk</span>
+        </div>
+        <p id="today" class="today"></p>
       </header>
+
+      <section class="hero" aria-labelledby="greeting">
+        <h1 id="greeting">Magandang araw po.</h1>
+        <p id="summary" class="summary"></p>
+      </section>
 
       <p id="message" class="message" role="status" aria-live="polite"></p>
 
-      <section aria-labelledby="products-heading">
+      <section class="products-section" aria-labelledby="products-heading">
         <div class="section-heading">
-          <div>
-            <p class="eyebrow">Inventory</p>
-            <h2 id="products-heading">Products</h2>
-          </div>
-          <button id="add-product-button" type="button">Add product</button>
+          <h2 id="products-heading">Mga Produkto <span id="products-count" class="count"></span></h2>
+          <button id="add-product-button" type="button">Magdagdag ng produkto</button>
         </div>
         <div id="products-list" class="product-grid" aria-live="polite"></div>
       </section>
 
       <section class="orders-section" aria-labelledby="orders-heading">
         <div class="section-heading">
-          <div>
-            <p class="eyebrow">Fulfillment</p>
-            <h2 id="orders-heading">Orders</h2>
-          </div>
+          <h2 id="orders-heading">Mga Order <span id="orders-count" class="count"></span></h2>
         </div>
 
         <form id="order-form" class="order-form">
           <label>
-            Customer name
-            <input id="customer-name" name="customer_name" type="text" required />
+            Pangalan ng customer
+            <input id="customer-name" name="customer_name" type="text" autocomplete="off" required />
           </label>
           <label>
-            Product
+            Produkto
             <select id="product-id" name="product_id" required>
-              <option value="">Select a product</option>
+              <option value="">Pumili ng produkto</option>
             </select>
           </label>
           <label>
-            Quantity
+            Dami
             <input id="quantity" name="quantity" type="number" min="1" step="1" value="1" required />
           </label>
-          <button type="submit">Create order</button>
+          <button type="submit">Gumawa ng order</button>
         </form>
 
-        <div class="order-filters" aria-label="Filter orders">
+        <div class="order-filters" aria-label="Salain ang mga order">
           <label>
-            Search orders
-            <input id="order-search" type="search" placeholder="Customer or product" />
+            Hanapin
+            <input id="order-search" type="search" placeholder="Customer o produkto" />
           </label>
           <label>
             Status
             <select id="order-status-filter">
-              <option value="">All statuses</option>
-              <option value="pending">Pending</option>
-              <option value="preparing">Preparing</option>
-              <option value="ready">Ready</option>
-              <option value="picked_up">Picked up</option>
+              <option value="">Lahat ng status</option>
+              <option value="pending">Naghihintay</option>
+              <option value="preparing">Inihahanda</option>
+              <option value="ready">Handa na</option>
+              <option value="picked_up">Nakuha na</option>
             </select>
           </label>
         </div>
@@ -75,11 +85,11 @@
             <thead>
               <tr>
                 <th>Customer</th>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Total</th>
+                <th>Produkto</th>
+                <th class="num">Dami</th>
+                <th class="num">Kabuuan</th>
                 <th>Status</th>
-                <th>Actions</th>
+                <th><span class="sr-only">Aksyon</span></th>
               </tr>
             </thead>
             <tbody id="orders-list"></tbody>
@@ -91,52 +101,53 @@
     <dialog id="product-dialog">
       <form id="product-form" class="dialog-form">
         <div class="dialog-heading">
-          <h2 id="product-dialog-title">Add product</h2>
-          <button id="close-product-dialog" class="icon-button" type="button" aria-label="Close">×</button>
+          <h2 id="product-dialog-title">Bagong produkto</h2>
+          <button id="close-product-dialog" class="icon-button" type="button" aria-label="Isara">×</button>
         </div>
-        <input id="product-id" name="product_id" type="hidden" />
+        <input id="edit-product-id" name="product_id" type="hidden" />
         <label>
-          Product name
+          Pangalan ng produkto
           <input id="product-name" name="name" type="text" required />
         </label>
         <label>
-          Price
+          Presyo (₱)
           <input id="product-price" name="price" type="number" min="0" step="0.01" required />
         </label>
         <label>
-          Stock quantity
+          Stock
           <input id="product-stock" name="stock_quantity" type="number" min="0" step="1" required />
         </label>
         <label>
-          Product image <span class="optional">(optional)</span>
+          Larawan <span class="optional">(opsyonal)</span>
           <input id="product-image" name="image" type="file" accept="image/*" />
         </label>
         <p id="product-form-error" class="form-error" role="alert"></p>
-        <button id="product-submit-button" type="submit">Add product</button>
+        <button id="product-submit-button" type="submit">Idagdag ang produkto</button>
       </form>
     </dialog>
 
     <dialog id="stock-dialog">
       <form id="stock-form" class="dialog-form">
         <div class="dialog-heading">
-          <h2>Replenish stock</h2>
-          <button id="close-stock-dialog" class="icon-button" type="button" aria-label="Close">×</button>
+          <h2>Dagdagan ang stock</h2>
+          <button id="close-stock-dialog" class="icon-button" type="button" aria-label="Isara">×</button>
         </div>
         <input id="stock-product-id" type="hidden" />
         <p id="stock-product-name" class="dialog-description"></p>
         <label>
-          Quantity to add
+          Ilan ang idadagdag?
           <input id="replenish-quantity" name="quantity" type="number" min="1" step="1" value="1" required />
         </label>
         <p id="stock-form-error" class="form-error" role="alert"></p>
-        <button id="stock-submit-button" type="submit">Add stock</button>
+        <button id="stock-submit-button" type="submit">Dagdagan</button>
       </form>
     </dialog>
 
     <footer class="site-footer">
-    <p>© 2026 Kapehan · A demo project by Allen · Built with Express.js, Supabase &amp; JavaScript</p>
-    <p class="footer-note">All products and orders shown are sample data.</p>
-</footer>
+      <div class="weave" aria-hidden="true"></div>
+      <p>© 2026 Kapehan. Proyekto ni Allen, gawa gamit ang Express.js, Supabase at JavaScript.</p>
+      <p class="footer-note">Sample data lamang ang lahat ng produkto at order dito.</p>
+    </footer>
     <script src="app.js"></script>
   </body>
 </html>

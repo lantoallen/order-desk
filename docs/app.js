@@ -11,18 +11,63 @@ const stockDialog = document.querySelector("#stock-dialog");
 const stockForm = document.querySelector("#stock-form");
 
 const statuses = ["pending", "preparing", "ready", "picked_up"];
+const statusLabels = {
+  pending: "Naghihintay",
+  preparing: "Inihahanda",
+  ready: "Handa na",
+  picked_up: "Nakuha na",
+};
+const lowStockLevel = 10;
 const currency = new Intl.NumberFormat("en-PH", { style: "currency", currency: "PHP" });
 const state = { products: [], orders: [] };
 
 function showMessage(text = "") { message.textContent = text; }
 function formatPrice(value) { return currency.format(Number(value) || 0); }
-function productName(order) { return order.products?.name || "Unknown product"; }
+function productName(order) { return order.products?.name || "Hindi kilalang produkto"; }
+function statusLabel(status) { return statusLabels[status] || status; }
+
+// Greeting by time of day, the way Batangueños say it
+function greeting(date = new Date()) {
+  const hour = date.getHours();
+  if (hour < 5) return "Magandang gabi po.";
+  if (hour < 11) return "Magandang umaga po.";
+  if (hour < 14) return "Magandang tanghali po.";
+  if (hour < 18) return "Magandang hapon po.";
+  return "Magandang gabi po.";
+}
+
+function formatToday(date = new Date()) {
+  try {
+    return new Intl.DateTimeFormat("fil-PH", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(date);
+  } catch (error) {
+    return date.toDateString();
+  }
+}
+
+function renderHeader() {
+  document.querySelector("#greeting").textContent = greeting();
+  document.querySelector("#today").textContent = formatToday();
+  const summary = document.querySelector("#summary");
+  if (state.orders.length === 0) {
+    summary.textContent = "Wala pang order. Gumawa ng una sa ibaba.";
+    return;
+  }
+  const count = (status) => state.orders.filter((order) => order.status === status).length;
+  const pending = count("pending");
+  const preparing = count("preparing");
+  const ready = count("ready");
+  if (pending + preparing + ready === 0) {
+    summary.textContent = "Naibigay na ang lahat ng order.";
+    return;
+  }
+  summary.textContent = `${pending} ang naghihintay, ${preparing} ang inihahanda, ${ready} ang handa na.`;
+}
 
 async function request(url, options) {
   const response = await fetch(url, options);
   if (!response.ok) {
     const body = await response.json().catch(() => ({}));
-    throw new Error(body.error || "Something went wrong. Please try again.");
+    throw new Error(body.error || "May nangyaring mali. Subukan ulit.");
   }
   return response.json();
 }
@@ -36,48 +81,69 @@ function button(label, className, onClick) {
   return element;
 }
 
+function stockText(product) {
+  const quantity = Number(product.stock_quantity) || 0;
+  const text = document.createElement("p");
+  text.className = "product-stock";
+  text.append(`${quantity} ang stock`);
+  if (quantity === 0 || quantity <= lowStockLevel) {
+    const flag = document.createElement("span");
+    flag.className = quantity === 0 ? "stock-flag is-out" : "stock-flag";
+    flag.textContent = quantity === 0 ? "Ubos na" : "Paubos na";
+    text.append(flag);
+  }
+  return text;
+}
+
 function renderProducts() {
   productsList.replaceChildren();
-  productSelect.replaceChildren(new Option("Select a product", ""));
+  productSelect.replaceChildren(new Option("Pumili ng produkto", ""));
+  document.querySelector("#products-count").textContent = state.products.length ? `${state.products.length} item` : "";
   if (state.products.length === 0) {
     const empty = document.createElement("p");
     empty.className = "empty-state";
-    empty.textContent = "No products are available yet.";
+    empty.textContent = "Ala eh, wala pang produkto. Magdagdag ng una.";
     productsList.append(empty);
     return;
   }
   state.products.forEach((product) => {
-    const card = document.createElement("article");
-    card.className = "product-card";
+    const item = document.createElement("article");
+    item.className = "product";
     if (product.image_url) {
       const image = document.createElement("img");
       image.className = "product-image";
       image.src = product.image_url;
       image.alt = product.name;
-      card.append(image);
+      item.append(image);
     } else {
       const placeholder = document.createElement("div");
       placeholder.className = "product-image-placeholder";
-      placeholder.textContent = "No image";
-      card.append(placeholder);
+      placeholder.setAttribute("aria-hidden", "true");
+      placeholder.textContent = product.name.trim().charAt(0).toUpperCase();
+      item.append(placeholder);
     }
+    const body = document.createElement("div");
+    const line = document.createElement("div");
+    line.className = "product-line";
     const name = document.createElement("h3");
     name.textContent = product.name;
+    const leader = document.createElement("span");
+    leader.className = "leader";
+    leader.setAttribute("aria-hidden", "true");
     const price = document.createElement("p");
     price.className = "product-price";
     price.textContent = formatPrice(product.price);
-    const stock = document.createElement("p");
-    stock.className = "product-stock";
-    stock.textContent = `${product.stock_quantity} in stock`;
+    line.append(name, leader, price);
     const actions = document.createElement("div");
     actions.className = "product-actions";
     actions.append(
-      button("Edit", "secondary-button", () => openProductDialog(product)),
-      button("Replenish", "secondary-button", () => openStockDialog(product)),
-      button("Delete", "delete-button", () => deleteProduct(product)),
+      button("I-edit", "secondary-button", () => openProductDialog(product)),
+      button("Dagdagan ang stock", "secondary-button", () => openStockDialog(product)),
+      button("Burahin", "delete-button", () => deleteProduct(product)),
     );
-    card.append(name, price, stock, actions);
-    productsList.append(card);
+    body.append(line, stockText(product), actions);
+    item.append(body);
+    productsList.append(item);
     productSelect.append(new Option(product.name, product.id));
   });
 }
@@ -93,29 +159,41 @@ function filteredOrders() {
 
 function renderOrders() {
   ordersList.replaceChildren();
+  renderHeader();
+  document.querySelector("#orders-count").textContent = state.orders.length ? `${state.orders.length} lahat` : "";
   const orders = filteredOrders();
   if (orders.length === 0) {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
     cell.colSpan = 6;
-    cell.textContent = "No orders match your filters.";
+    cell.textContent = state.orders.length === 0 ? "Wala pang order." : "Walang order na tugma sa hinahanap mo.";
     row.append(cell);
     ordersList.append(row);
     return;
   }
   orders.forEach((order) => {
     const row = document.createElement("tr");
-    [order.customer_name, productName(order), order.quantity, formatPrice(order.total_price)].forEach((value) => {
+    [
+      [order.customer_name, ""],
+      [productName(order), ""],
+      [order.quantity, "num"],
+      [formatPrice(order.total_price), "num"],
+    ].forEach(([value, className]) => {
       const cell = document.createElement("td");
       cell.textContent = value;
+      if (className) cell.className = className;
       row.append(cell);
     });
     const statusCell = document.createElement("td");
+    const dot = document.createElement("span");
+    dot.className = "status-dot";
+    dot.dataset.status = order.status;
     const statusSelect = document.createElement("select");
-    statuses.forEach((status) => statusSelect.append(new Option(status, status, false, status === order.status)));
+    statusSelect.setAttribute("aria-label", `Status ng order ni ${order.customer_name}`);
+    statuses.forEach((status) => statusSelect.append(new Option(statusLabel(status), status, false, status === order.status)));
     const inlineError = document.createElement("span");
     inlineError.className = "inline-error";
-    const saveButton = button("Save", "", () => updateOrderStatus(order.id, statusSelect.value, saveButton, inlineError));
+    const saveButton = button("I-save", "", () => updateOrderStatus(order.id, statusSelect.value, saveButton, inlineError));
     saveButton.disabled = true;
     statusSelect.addEventListener("change", () => {
       saveButton.disabled = statusSelect.value === order.status;
@@ -123,10 +201,10 @@ function renderOrders() {
     });
     const statusControls = document.createElement("div");
     statusControls.className = "status-controls";
-    statusControls.append(statusSelect, saveButton);
+    statusControls.append(dot, statusSelect, saveButton);
     statusCell.append(statusControls, inlineError);
     const actionsCell = document.createElement("td");
-    actionsCell.append(button("Delete", "delete-button", () => deleteOrder(order.id)));
+    actionsCell.append(button("Burahin", "delete-button", () => deleteOrder(order.id)));
     row.append(statusCell, actionsCell);
     ordersList.append(row);
   });
@@ -151,9 +229,9 @@ function openProductDialog(product) {
   productForm.reset();
   document.querySelector("#product-form-error").textContent = "";
   const editing = Boolean(product);
-  document.querySelector("#product-dialog-title").textContent = editing ? "Edit product" : "Add product";
-  document.querySelector("#product-submit-button").textContent = editing ? "Save product" : "Add product";
-  document.querySelector("#product-id").value = product?.id || "";
+  document.querySelector("#product-dialog-title").textContent = editing ? "I-edit ang produkto" : "Bagong produkto";
+  document.querySelector("#product-submit-button").textContent = editing ? "I-save ang produkto" : "Idagdag ang produkto";
+  document.querySelector("#edit-product-id").value = product?.id || "";
   document.querySelector("#product-name").value = product?.name || "";
   document.querySelector("#product-price").value = product?.price ?? "";
   document.querySelector("#product-stock").value = product?.stock_quantity ?? 0;
@@ -163,7 +241,7 @@ function openStockDialog(product) {
   stockForm.reset();
   document.querySelector("#replenish-quantity").value = 1;
   document.querySelector("#stock-product-id").value = product.id;
-  document.querySelector("#stock-product-name").textContent = `Add stock for ${product.name}.`;
+  document.querySelector("#stock-product-name").textContent = `Dagdag na stock para sa ${product.name}.`;
   document.querySelector("#stock-form-error").textContent = "";
   stockDialog.showModal();
 }
@@ -183,7 +261,7 @@ async function deleteOrder(id) {
   try { await request(`/api/orders/${id}`, { method: "DELETE" }); await refreshOrders(); } catch (error) { showMessage(error.message); }
 }
 async function deleteProduct(product) {
-  if (!window.confirm(`Delete ${product.name}? This cannot be undone.`)) return;
+  if (!window.confirm(`Burahin ang ${product.name}? Hindi na ito mababawi.`)) return;
   try { await request(`/api/products/${product.id}`, { method: "DELETE" }); await refreshProducts(); } catch (error) { showMessage(error.message); }
 }
 
@@ -202,7 +280,7 @@ productForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const submit = document.querySelector("#product-submit-button");
   const errorMessage = document.querySelector("#product-form-error");
-  const id = document.querySelector("#product-id").value;
+  const id = document.querySelector("#edit-product-id").value;
   submit.disabled = true;
   errorMessage.textContent = "";
   try {
@@ -232,4 +310,5 @@ document.querySelector("#close-product-dialog").addEventListener("click", () => 
 document.querySelector("#close-stock-dialog").addEventListener("click", () => stockDialog.close());
 orderSearch.addEventListener("input", renderOrders);
 orderStatusFilter.addEventListener("change", renderOrders);
+renderHeader();
 Promise.all([loadProducts(), loadOrders()]).catch((error) => showMessage(error.message));
